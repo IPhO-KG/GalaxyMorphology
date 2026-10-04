@@ -2,17 +2,17 @@
 
 An interpretable computer-vision pipeline for **galaxy morphology classification** and **apparent spiral handedness (CW/CCW)** in deep-field astronomical images.
 
-The project grew from simple image-enhancement experiments (Gaussian smoothing, residuals, unsharp masking, bilateral denoising, log stretching, and gradients) into a batch pipeline that:
+The project grew from simple image-enhancement experiments into a full batch workflow that:
 
 1. detects source candidates in a deep-field image;
-2. crops each object from the **native-resolution original**;
+2. crops each source from the **native-resolution original**;
 3. measures morphology-related features;
 4. assigns an interpretable morphology candidate;
 5. runs a log-polar/Fourier spiral analysis where appropriate;
 6. stress-tests CW/CCW under changes in center, annulus, smoothing, noise, and mirroring;
 7. exports a CSV catalog and summary plots.
 
-> **Research status:** experimental / research prototype. Morphology scores are heuristic evidence scores, **not calibrated probabilities**. CW/CCW refers to apparent winding on the 2-D image, not the physical 3-D rotation direction of the galaxy.
+> **Research status:** experimental research prototype. Morphology scores are heuristic evidence scores, **not calibrated probabilities**. CW/CCW refers to apparent winding on the 2-D image, not the physical 3-D rotation direction of the galaxy.
 
 ## Current morphology classes
 
@@ -25,13 +25,46 @@ The project grew from simple image-enhancement experiments (Gaussian smoothing, 
 - UNRESOLVED
 - NO CLEAR SOURCE
 
-## Method overview
+## Main code
 
-The current pipeline combines two interpretable branches.
+### Single-galaxy analyzer
+
+`src/hybrid_galaxy_analyzer.py`
+
+Runs the morphology + robust winding pipeline on a single crop.
+
+### Automatic deep-field batch analyzer
+
+`src/automatic_galaxy_batch_analyzer.py`
+
+Runs the full-field workflow:
+
+```text
+deep-field image
+    ↓
+source detection
+    ↓
+native-resolution crops
+    ↓
+morphology analysis
+    ↓
+robust CW/CCW analysis
+    ↓
+catalog + summary plots
+```
+
+## Notebooks
+
+- `notebooks/02_single_galaxy_analysis.ipynb`
+- `notebooks/03_batch_deep_field_analysis.ipynb`
+
+These are the current working Jupyter versions of the analysis.
+
+## Method overview
 
 ### 1. Morphology branch
 
-For each detected source, the code estimates quantities such as:
+For each detected source, the code estimates:
 
 - source center;
 - sky/background and noise;
@@ -43,7 +76,7 @@ For each detected source, the code estimates quantities such as:
 - flux radii such as \(r_{50}\) and \(r_{90}\);
 - an SNR proxy.
 
-These are combined into heuristic scores for the morphology classes above.
+These quantities are combined into heuristic morphology scores.
 
 ### 2. Spiral-winding branch
 
@@ -53,7 +86,7 @@ The source is transformed from Cartesian coordinates to a log-polar representati
 r = r_0 e^{b\theta}
 \]
 
-becomes approximately linear in \((\theta, \ln r)\). The code then compares Fourier/log-spiral templates for modes \(m=2,3,4\) and positive/negative slopes.
+becomes approximately linear in \((\theta, \ln r)\). The code compares Fourier/log-spiral templates for modes \(m=2,3,4\) and positive/negative slopes.
 
 The signed winding score is
 
@@ -73,7 +106,7 @@ A sign alone is **not** accepted as a final result. The pipeline also checks:
 - axis ratio;
 - mirror consistency.
 
-If these checks fail, the output stays `UNCERTAIN`.
+If these checks fail, the output remains `UNCERTAIN`.
 
 ## Pilot batch result
 
@@ -106,41 +139,50 @@ GalaxyMorphology/
 │   ├── METHODOLOGY.md
 │   └── RESULTS.md
 ├── src/
-│   └── README.md
+│   ├── README.md
+│   ├── hybrid_galaxy_analyzer.py
+│   └── automatic_galaxy_batch_analyzer.py
 ├── notebooks/
-│   └── README.md
+│   ├── README.md
+│   ├── 02_single_galaxy_analysis.ipynb
+│   └── 03_batch_deep_field_analysis.ipynb
 ├── data/
 │   └── README.md
 └── results/
     └── README.md
 ```
 
-The next code upload should place the reusable analyzer in `src/` and exploratory/batch notebooks in `notebooks/`.
+## Quick start
 
-## Quick environment setup
+Create an environment:
 
 ```bash
 python -m venv .venv
-source .venv/bin/activate   # macOS/Linux
+source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-For Jupyter:
+Open the batch notebook:
 
 ```bash
-jupyter lab
+jupyter lab notebooks/03_batch_deep_field_analysis.ipynb
 ```
 
-## Recommended data workflow
+Or run the Python implementation from `src/`.
 
-For exploratory testing, use high-resolution lossless public JWST PNG/TIFF imagery. For scientifically stronger analysis, prefer calibrated survey products (e.g. FITS) and preserve native pixel values.
+## Data workflow
 
-Do **not** commit very large raw astronomical images to Git. Keep only small examples in the repository and document the source of external datasets.
+For exploratory testing, high-resolution public JWST PNG/TIFF imagery is convenient. For scientifically stronger analysis, calibrated FITS products are preferable because they preserve native numerical pixel values.
+
+Do **not** commit large raw astronomical images to Git. Keep only small examples in the repository and document the source of external datasets.
 
 ## Roadmap
 
-- [ ] Move the current hybrid analyzer into `src/`
-- [ ] Add the automatic batch-cropping notebook to `notebooks/`
+- [x] Add hybrid single-galaxy analyzer
+- [x] Add automatic deep-field batch analyzer
+- [x] Add working Jupyter notebooks
+- [x] Add methodology and pilot-results documentation
+- [ ] Add the early image-enhancement notebook as a historical development notebook
 - [ ] Add star/artifact rejection before morphology classification
 - [ ] Add deblending for overlapping sources
 - [ ] Validate thresholds on labeled galaxies
@@ -161,4 +203,4 @@ Independent Researcher, Bishkek, Kyrgyz Republic
 
 ## Citation
 
-If you use this repository in academic work, please cite the repository metadata in `CITATION.cff`. A manuscript describing the development from image enhancement to automated morphology and winding analysis is in preparation.
+If you use this repository in academic work, please cite the repository metadata in `CITATION.cff`.
