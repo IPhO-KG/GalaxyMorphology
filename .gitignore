@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.venv/
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Editors / OS
+.DS_Store
+.vscode/
+.idea/
+
+# Generated outputs
+galaxy_batch_output/
+paper_figures/
+results/generated/
+*.log
+*.aux
+*.out
+*.toc
+*.synctex.gz
+
+# Large local astronomy data
+data/raw/
+data/**/*.fits
+data/**/*.fit
+data/**/*.fz
+data/**/*.tif
+data/**/*.tiff
+data/**/*.jpg
+data/**/*.jpeg
+data/**/*.png
+
+# Keep documentation placeholders
+!data/README.md
+!results/README.md
