@@ -203,7 +203,7 @@ Independent Researcher, Bishkek, Kyrgyz Republic
 
 ## Acknowledgments
 
-I thank Hadi Erturk (University of Oxford) for mentoring this project and for suggesting the use of convolution and the analysis of pixel-level patterns in the images.
+I am grateful to Hadi Erturk (University of Oxford) for his mentorship, patience and many helpful discussions, and for suggesting the use of convolution and the analysis of pixel-level patterns in the images.
 
 ## Citation
 
