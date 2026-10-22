@@ -203,7 +203,7 @@ Independent Researcher, Bishkek, Kyrgyz Republic
 
 ## Acknowledgments
 
-I thank Ore Gottlieb (MIT) for suggesting the idea of using convolution of functions in the image analysis.
+I thank Hadi Erturk (University of Oxford) for mentoring this project and for suggesting the use of convolution and the analysis of pixel-level patterns in the images.
 
 ## Citation
 
