@@ -201,6 +201,10 @@ The pipeline is intentionally conservative. `UNCERTAIN` is a valid scientific re
 **Emir Anaraly uulu**  
 Independent Researcher, Bishkek, Kyrgyz Republic
 
+## Acknowledgments
+
+I thank Ore Gottlieb (MIT) for suggesting the idea of using convolution of functions in the image analysis.
+
 ## Citation
 
 If you use this repository in academic work, please cite the repository metadata in `CITATION.cff`.
